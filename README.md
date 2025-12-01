@@ -1,16 +1,214 @@
 # pertemuan10
 
-A new Flutter project.
+Proyek contoh Flutter yang dibangun sebagai toko sederhana (Toko Kita). Proyek ini berisi halaman sederhana untuk autentikasi, CRUD produk, dan beberapa utilitas helper.
 
-## Getting Started
+---
 
-This project is a starting point for a Flutter application.
+## Daftar Isi
 
-A few resources to get you started if this is your first Flutter project:
+- [Ringkasan](#ringkasan)
+- [Prasyarat](#prasyarat)
+- [Persiapan & Menjalankan](#persiapan--menjalankan)
+- [Dependensi](#dependensi)
+- [Arsitektur & Struktur File](#arsitektur--struktur-file)
+- [Halaman & Komponen (UI)](#halaman--komponen-ui)
+  - [`main.dart`](#maindart)
+  - [`login_page.dart`](#login_pagedart)
+  - [`registrasi_page.dart`](#registrasi_pagedart)
+  - [`produk_page.dart`](#produk_pagedart)
+  - [`produk_form.dart`](#produk_formdart)
+  - [`produk_detail.dart`](#produk_detaildart)
+- [Lapisan Bloc](#lapisan-bloc)
+  - [`login_bloc.dart`](#login_blocdart)
+  - [`registrasi_bloc.dart`](#registrasi_blocdart)
+  - [`produk_bloc.dart`](#produk_blocdart)
+- [Model](#model)
+- [Helpers](#helpers)
+- [Widget Kustom](#widget-kustom)
+- [Catatan & Todo](#catatan--todo)
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+---
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Ringkasan
+
+Repositori ini adalah aplikasi contoh kecil yang menampilkan daftar produk dengan operasi CRUD dan alur autentikasi/registrasi sederhana. Tujuannya untuk menunjukkan struktur proyek Flutter yang menggunakan lapisan `bloc` sederhana yang berinteraksi dengan helper `Api` dan `ApiUrl` untuk endpoint.
+
+## Prasyarat
+
+- Flutter SDK (>= 3.x)
+- Dart SDK (termasuk di Flutter)
+- Perangkat/Emulator untuk menjalankan aplikasi
+
+## Persiapan & Menjalankan
+
+1. Instal dependensi:
+
+```bash
+flutter pub get
+```
+
+2. Jalankan aplikasi di emulator atau perangkat:
+
+```bash
+flutter run
+```
+
+---
+
+## Dependensi
+
+- flutter
+- cupertino_icons
+- http (untuk HTTP REST)
+- shared_preferences (persistensi token dan user id)
+
+---
+
+## Arsitektur & Struktur File
+
+- lib/
+  - main.dart (titik masuk aplikasi)
+  - ui/ (halaman UI)
+  - bloc/ (logika bisnis sederhana yang memanggil Api)
+  - model/ (model data yang mem-parse response dari API)
+  - helpers/ (Api, ApiUrl, UserInfo)
+  - widget/ (dialog yang dapat digunakan ulang)
+
+---
+
+## Halaman & Komponen (UI)
+
+### main.dart
+
+- Titik masuk aplikasi.
+- Menetapkan `ProdukPage()` sebagai halaman utama (`home`).
+
+---
+
+### login_page.dart
+
+- Tujuan: Form sederhana untuk login (email & password).
+- Komponen dan Perilaku Utama:
+  - `TextFormField` untuk `email` dan `password` serta validasi.
+  - `ElevatedButton` untuk Login: memvalidasi form sebelum lanjut (saat ini menampilkan simulasi loading).
+  - `InkWell` untuk navigasi ke halaman Registrasi.
+- Integrasi:
+  - Ada `LoginBloc` untuk memanggil API login. Saat ini UI menggunakan simulasi delay untuk demonstrasi; bisa diganti dengan panggilan `LoginBloc.login()`.
+
+---
+
+### registrasi_page.dart
+
+- Tujuan: Form registrasi pengguna.
+- Komponen dan Perilaku Utama:
+  - Field: `Nama`, `Email`, `Password`, `Konfirmasi Password`.
+  - Validasi sisi-klien:
+    - Nama >= 3 karakter
+    - Email harus diisi dan valid
+    - Password >= 6 karakter
+    - Konfirmasi Password sama dengan Password
+  - Tombol Registrasi: menampilkan indikator loading dan saat ini mensimulasikan panggilan jaringan. Jika berhasil, form di-clear dan menampilkan snack bar.
+- Integrasi:
+  - Tersedia `RegistrasiBloc` untuk memanggil endpoint registrasi. UI saat ini menggunakan simulasi — Anda dapat mengkoneksikannya ke bloc untuk panggilan nyata.
+
+---
+
+### produk_page.dart
+
+- Tujuan: Menampilkan daftar produk, navigasi untuk menambah produk, dan menu logout.
+- Komponen dan Perilaku Utama:
+  - `AppBar` dengan tombol Add yang menavigasi ke `ProdukForm`.
+  - `Drawer` berisi `Logout` (action masih stub).
+  - `ListView` menampilkan beberapa contoh `ItemProduk` (hard-coded sebagai contoh).
+  - `ItemProduk`: kartu yang bisa diklik untuk membuka `ProdukDetail`.
+
+---
+
+### produk_form.dart
+
+- Tujuan: Menambah atau mengubah produk.
+- Komponen dan Perilaku Utama:
+  - Menerima opsi `Produk` untuk edit dan menginisialisasi field bila ada.
+  - Field: `Kode Produk`, `Nama Produk`, `Harga`.
+  - Validasi: memeriksa isian tidak kosong dan `Harga` numerik.
+  - Saat submit:
+    - Mem-validasi form di sisi-klien.
+    - Menampilkan indikator loading.
+    - Mensimulasikan panggilan jaringan — bisa diganti dengan `ProdukBloc.addProduk` atau `ProdukBloc.updateProduk`.
+  - Menutup/`dispose()` TextEditingController.
+
+---
+
+### produk_detail.dart
+
+- Tujuan: Menampilkan detail produk serta tombol edit/hapus.
+- Komponen dan Perilaku Utama:
+  - Menampilkan `kodeProduk`, `namaProduk`, dan `hargaProduk`.
+  - Tombol Edit: navigasi ke `ProdukForm` dengan value produk.
+  - Tombol Hapus: menampilkan dialog konfirmasi, bila Ya: memanggil `ProdukBloc.deleteProduk(id: ...)` dan kembali ke `ProdukPage` bila berhasil, atau menampilkan `WarningDialog` bila gagal.
+
+---
+
+## Lapisan Bloc
+
+Lapisan bloc dalam proyek ini berupa sekumpulan fungsi statis yang memanggil helper `Api` dan mem-parse response menjadi model.
+
+### login_bloc.dart
+
+- `LoginBloc.login({String? email, String? password})` — memanggil `Api().post(...)` dan mengembalikan model `Login`.
+
+### registrasi_bloc.dart
+
+- `RegistrasiBloc.registrasi(...)` — memanggil endpoint `registrasi` dan mengembalikan model `Registrasi`.
+
+### produk_bloc.dart
+
+- Fungsi CRUD:
+  - `getProduks()` — memanggil `Api().get()` lalu mengembalikan `List<Produk>`.
+  - `addProduk({Produk? produk})` — memanggil API create.
+  - `updateProduk({required Produk produk})` — memanggil API update.
+  - `deleteProduk({int? id})` — memanggil API delete dan mengembalikan boolean status.
+
+---
+
+## Model
+
+- `model/login.dart` — model `Login` (token, userID, userEmail).
+- `model/registrasi.dart` — model `Registrasi` (code, status, data).
+- `model/produk.dart` — model `Produk`.
+
+Semua model memiliki factory `fromJson(Map<String, dynamic> obj)` untuk mem-parse response API.
+
+---
+
+## Helpers
+
+- `helpers/api.dart` — wrapper `Api` yang menggunakan `http` untuk `get`, `post`, `put`, `delete`.
+- `helpers/api_url.dart` — konstan endpoint API (baseUrl, login, registrasi, dll.).
+- `helpers/user_info.dart` — pembungkus `SharedPreferences` untuk menyimpan token dan user id (set/get/clear).
+
+---
+
+## Widget Kustom
+
+- `widget/success_dialog.dart` — dialog untuk menampilkan pesan berhasil.
+- `widget/warning_dialog.dart` — dialog untuk menampilkan pesan gagal/peringatan.
+
+---
+
+## Catatan & Todo
+
+- Hubungkan `registrasi_page.dart` ke `RegistrasiBloc` agar registrasi benar-benar mengirim data ke backend, dan tampilkan dialog sukses/error sesuai response.
+- Hubungkan `login_page.dart` ke `LoginBloc.login()` dan simpan token & userId menggunakan `UserInfo` setelah berhasil.
+- Ganti daftar produk yang di-hardcode di `ProdukPage` dengan hasil `ProdukBloc.getProduks()`.
+- Perbaiki error-handling di bloc dan tampilkan UI yang sesuai saat terjadi kegagalan jaringan.
+
+---
+
+Jika ingin, saya juga dapat:
+
+- Menghubungkan `registrasi_page.dart` ke `RegistrasiBloc` dan menambahkan dialog sukses/gagal.
+- Menghubungkan `login_page.dart` ke `LoginBloc` dan menyimpan token menggunakan `UserInfo`.
+- Mengganti daftar produk hard-coded menjadi panggilan `ProdukBloc.getProduks()`.
+
+Beritahukan mana yang ingin kamu lanjutkan, saya akan mengimplementasikannya.
