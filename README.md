@@ -1,80 +1,6 @@
 # pertemuan10
 
-Proyek contoh Flutter yang dibangun sebagai toko sederhana (Toko Kita). Proyek ini berisi halaman sederhana untuk autentikasi, CRUD produk, dan beberapa utilitas helper.
-
----
-
-## Daftar Isi
-
-- [Ringkasan](#ringkasan)
-- [Prasyarat](#prasyarat)
-- [Persiapan & Menjalankan](#persiapan--menjalankan)
-- [Dependensi](#dependensi)
-- [Arsitektur & Struktur File](#arsitektur--struktur-file)
-- [Halaman & Komponen (UI)](#halaman--komponen-ui)
-  - [`main.dart`](#maindart)
-  - [`login_page.dart`](#login_pagedart)
-  - [`registrasi_page.dart`](#registrasi_pagedart)
-  - [`produk_page.dart`](#produk_pagedart)
-  - [`produk_form.dart`](#produk_formdart)
-  - [`produk_detail.dart`](#produk_detaildart)
-- [Lapisan Bloc](#lapisan-bloc)
-  - [`login_bloc.dart`](#login_blocdart)
-  - [`registrasi_bloc.dart`](#registrasi_blocdart)
-  - [`produk_bloc.dart`](#produk_blocdart)
-- [Model](#model)
-- [Helpers](#helpers)
-- [Widget Kustom](#widget-kustom)
-- [Catatan & Todo](#catatan--todo)
-
----
-
-## Ringkasan
-
 Repositori ini adalah aplikasi contoh kecil yang menampilkan daftar produk dengan operasi CRUD dan alur autentikasi/registrasi sederhana. Tujuannya untuk menunjukkan struktur proyek Flutter yang menggunakan lapisan `bloc` sederhana yang berinteraksi dengan helper `Api` dan `ApiUrl` untuk endpoint.
-
-## Prasyarat
-
-- Flutter SDK (>= 3.x)
-- Dart SDK (termasuk di Flutter)
-- Perangkat/Emulator untuk menjalankan aplikasi
-
-## Persiapan & Menjalankan
-
-1. Instal dependensi:
-
-```bash
-flutter pub get
-```
-
-2. Jalankan aplikasi di emulator atau perangkat:
-
-```bash
-flutter run
-```
-
----
-
-## Dependensi
-
-- flutter
-- cupertino_icons
-- http (untuk HTTP REST)
-- shared_preferences (persistensi token dan user id)
-
----
-
-## Arsitektur & Struktur File
-
-- lib/
-  - main.dart (titik masuk aplikasi)
-  - ui/ (halaman UI)
-  - bloc/ (logika bisnis sederhana yang memanggil Api)
-  - model/ (model data yang mem-parse response dari API)
-  - helpers/ (Api, ApiUrl, UserInfo)
-  - widget/ (dialog yang dapat digunakan ulang)
-
----
 
 ## Halaman & Komponen (UI)
 
@@ -83,7 +9,6 @@ flutter run
 - Titik masuk aplikasi.
 - Menetapkan `ProdukPage()` sebagai halaman utama (`home`).
 
----
 
 ## Cara Kerja Login & Registrasi (Alur)
 
@@ -215,7 +140,6 @@ curl.exe -v http://192.168.1.15:8080/login -Method POST -ContentType "applicatio
 - Integrasi:
   - Ada `LoginBloc` untuk memanggil API login. Saat ini UI menggunakan simulasi delay untuk demonstrasi; bisa diganti dengan panggilan `LoginBloc.login()`.
 
----
 
 ### registrasi_page.dart
 
@@ -231,7 +155,6 @@ curl.exe -v http://192.168.1.15:8080/login -Method POST -ContentType "applicatio
 - Integrasi:
   - Tersedia `RegistrasiBloc` untuk memanggil endpoint registrasi. UI saat ini menggunakan simulasi — Anda dapat mengkoneksikannya ke bloc untuk panggilan nyata.
 
----
 
 ### produk_page.dart
 
@@ -242,7 +165,6 @@ curl.exe -v http://192.168.1.15:8080/login -Method POST -ContentType "applicatio
   - `ListView` menampilkan beberapa contoh `ItemProduk` (hard-coded sebagai contoh).
   - `ItemProduk`: kartu yang bisa diklik untuk membuka `ProdukDetail`.
 
----
 
 ### produk_form.dart
 
@@ -316,18 +238,14 @@ Semua model memiliki factory `fromJson(Map<String, dynamic> obj)` untuk mem-pars
 
 ---
 
-## Catatan & Todo
+## Lampiran
+<img width="804" height="1029" alt="image" src="https://github.com/user-attachments/assets/3a4d0077-44ed-404b-b809-a355692669ef" />
 
-- Hubungkan `registrasi_page.dart` ke `RegistrasiBloc` agar registrasi benar-benar mengirim data ke backend, dan tampilkan dialog sukses/error sesuai response.
-- Hubungkan `login_page.dart` ke `LoginBloc.login()` dan simpan token & userId menggunakan `UserInfo` setelah berhasil.
-- Ganti daftar produk yang di-hardcode di `ProdukPage` dengan hasil `ProdukBloc.getProduks()`.
-- Perbaiki error-handling di bloc dan tampilkan UI yang sesuai saat terjadi kegagalan jaringan.
+<img width="628" height="1030" alt="image" src="https://github.com/user-attachments/assets/989034a5-7f68-446f-bb5b-5775a814c76a" />
 
----
+<img width="628" height="1080" alt="image" src="https://github.com/user-attachments/assets/f8c7519c-f908-4828-89da-862b87bb7331" />
 
-Jika ingin, saya juga dapat:
 
-- Menghubungkan `registrasi_page.dart` ke `RegistrasiBloc` dan menambahkan dialog sukses/gagal.
 - Menghubungkan `login_page.dart` ke `LoginBloc` dan menyimpan token menggunakan `UserInfo`.
 - Mengganti daftar produk hard-coded menjadi panggilan `ProdukBloc.getProduks()`.
 
