@@ -129,4 +129,3 @@ Semua model memiliki factory `fromJson(Map<String, dynamic> obj)` untuk mem-pars
 - Menghubungkan `login_page.dart` ke `LoginBloc` dan menyimpan token menggunakan `UserInfo`.
 - Mengganti daftar produk hard-coded menjadi panggilan `ProdukBloc.getProduks()`.
 
-Beritahukan mana yang ingin kamu lanjutkan, saya akan mengimplementasikannya.
