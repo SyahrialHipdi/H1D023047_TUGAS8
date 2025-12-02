@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:pertemuan10/bloc/registrasi_bloc.dart';
+import 'package:pertemuan10/widget/success_dialog.dart';
+import 'package:pertemuan10/widget/warning_dialog.dart';
 
 class RegistrasiPage extends StatefulWidget {
   const RegistrasiPage({Key? key}) : super(key: key);
@@ -115,57 +118,62 @@ class _RegistrasiPageState extends State<RegistrasiPage> {
   }
 
   Widget _buttonRegistrasi() {
-    return SizedBox(
-      width: double.infinity,
-      child: ElevatedButton(
-        child: _isLoading
-            ? const SizedBox(
-                width: 18,
-                height: 18,
-                child: CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                  strokeWidth: 2.0,
-                ),
-              )
-            : const Text("Registrasi"),
-        onPressed: _isLoading
-            ? null
-            : () async {
-                final validate = _formKey.currentState?.validate() ?? false;
-                if (!validate) return;
-
-                setState(() {
-                  _isLoading = true;
-                });
-
-                // Simulate registration network call
-                await Future.delayed(const Duration(seconds: 1));
-
-                setState(() {
-                  _isLoading = false;
-                });
-
-                // On success, clear form and show success
-                _formKey.currentState?.save();
-                _namaTextboxController.clear();
-                _emailTextboxController.clear();
-                _passwordTextboxController.clear();
-                _passwordKonfirmasiTextboxController.clear();
-
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Registrasi berhasil')),
-                );
-              },
-      ),
+    return ElevatedButton(
+      child: const Text("Registrasi"),
+      onPressed: () {
+        var validate = _formKey.currentState!.validate();
+        if (validate) {
+          if (!_isLoading) _submit();
+        }
+      },
     );
   }
 
-  @override
-  void dispose() {
-    _namaTextboxController.dispose();
-    _emailTextboxController.dispose();
-    _passwordTextboxController.dispose();
-    _passwordKonfirmasiTextboxController.dispose();
-    super.dispose();
+  void _submit() {
+    _formKey.currentState!.save();
+    setState(() {
+      _isLoading = true;
+    });
+    RegistrasiBloc.registrasi(
+      nama: _namaTextboxController.text,
+      email: _emailTextboxController.text,
+      password: _passwordTextboxController.text,
+    ).then(
+      (value) {
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (BuildContext context) => SuccessDialog(
+            description: "Registrasi berhasil, silahkan login",
+            okClick: () {
+              Navigator.pop(context);
+            },
+          ),
+        );
+      },
+      onError: (error) {
+        // Log the error to console and show details to the user
+        print(error);
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (BuildContext context) => WarningDialog(
+            description:
+                error?.toString() ?? "Registrasi gagal, silahkan coba lagi",
+          ),
+        );
+      },
+    );
+    setState(() {
+      _isLoading = false;
+    });
+
+    // @override
+    // void dispose() {
+    //   _namaTextboxController.dispose();
+    //   _emailTextboxController.dispose();
+    //   _passwordTextboxController.dispose();
+    //   _passwordKonfirmasiTextboxController.dispose();
+    //   super.dispose();
   }
 }

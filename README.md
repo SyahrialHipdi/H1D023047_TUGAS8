@@ -85,6 +85,126 @@ flutter run
 
 ---
 
+## Cara Kerja Login & Registrasi (Alur)
+
+- Endpoint utama:
+
+  - `POST /registrasi` → untuk membuat akun baru
+  - `POST /login` → untuk autentikasi dan mendapatkan token
+
+- Alur Registrasi:
+
+  1. Pengguna membuka `registrasi_page.dart` dan mengisi: `nama`, `email`, `password`, `konfirmasi password`.
+  2. Form divalidasi oleh UI (misal: panjang password minimal, email valid).
+  3. Saat submit, `RegistrasiBloc.registrasi(...)` dipanggil. `RegistrasiBloc` memanggil `Api().post(ApiUrl.registrasi, body)`.
+  4. Di backend CI4, biasanya server menerima JSON pada body:
+     ```json
+     { "nama": "Budi", "email": "budi@example.com", "password": "123456" }
+     ```
+  5. Jika pembuatan sukses server mengembalikan status `201` atau `200` dengan body JSON — UI akan menampilkan dialog sukses. Kalau gagal (400/422), UI menampilkan error.
+
+- Alur Login:
+  1. Pengguna membuka `login_page.dart`, mengisi `email` dan `password`.
+  2. Saat submit, `LoginBloc.login(email: ..., password: ...)` dipanggil; `Api().post(ApiUrl.login, body)` membuat request.
+  3. Body JSON untuk login misal:
+     ```json
+     { "email": "budi@example.com", "password": "123456" }
+     ```
+  4. Jika login sukses server mengembalikan JSON berisi token dan data user (status code 200).
+  5. `LoginBloc` mem-parse JSON ke model `Login`. `login_page.dart` menyimpan token dan userId ke `UserInfo().setToken(...)` dan `UserInfo().setUserID(...)` sehingga token dapat dipakai pada request berikutnya.
+  6. Setelah login, UI akan menavigasi pengguna ke `ProdukPage()`.
+
+> Catatan: `lib/helpers/api.dart` menambahkan header `Authorization: Bearer <token>` secara otomatis untuk request yang membutuhkan otentikasi — hanya kalau token ada.
+
+---
+
+## Cara Kerja CRUD Produk (Alur & Endpoint)
+
+- Endpoint (contoh):
+
+  - `GET /produk` → ambil daftar produk
+  - `POST /produk` → tambah produk
+  - `PUT /produk/{id}/update` → perbarui data produk
+  - `DELETE /produk/{id}` → hapus produk
+
+- Alur Read (Menampilkan daftar produk):
+
+  1. `ProdukPage` memanggil `ProdukBloc.getProduks()` yang memanggil `Api().get(ApiUrl.listProduk)`.
+  2. `Api` mengirim HTTP GET ke endpoint; response 200 berisi JSON list produk.
+  3. `ProdukBloc` mengubah body JSON menjadi `List<Produk>` lalu UI menampilkan list.
+
+- Alur Create:
+
+  1. `ProdukForm` mengumpulkan field `kodeProduk`, `namaProduk`, `harga`.
+  2. Memanggil `ProdukBloc.addProduk(...)` yang panggil `Api().post(ApiUrl.createProduk, body)` dengan body JSON seperti:
+     ```json
+     { "kode_produk": "PRD001", "nama": "Contoh", "harga": 10000 }
+     ```
+  3. Jika sukses (kode 200/201), server mengembalikan objek baru; UI menutup form dan memuat ulang daftar.
+
+- Alur Update:
+
+  1. `ProdukPage` membuka `ProdukForm` untuk produk terpilih (mengirim data ke form).
+  2. Setelah submit, `ProdukBloc.updateProduk(...)` memanggil `Api().put(ApiUrl.updateProduk(id), body)`.
+  3. Server memproses dan mengembalikan success (200). UI memperbarui list dengan data baru.
+
+- Alur Delete:
+  1. `ProdukDetail` menampilkan tombol `Delete`.
+  2. Konfirmasi lalu `ProdukBloc.deleteProduk(id)` dipanggil: `Api().delete(ApiUrl.deleteProduk(id))`.
+  3. Server merespon status (200), UI menghapus item dari list dan menampilkan pesan sukses.
+
+---
+
+## Header & Token
+
+- Token disimpan menggunakan `helpers/user_info.dart` (SharedPreferences):
+  - `UserInfo().setToken(token)` saat login berhasil.
+  - `UserInfo().getToken()` digunakan pada `Api` untuk menambahkan header `Authorization` (format: `Bearer <token>`).
+
+## Payload & Response (Contoh)
+
+- Registrasi sukses (201/200) contoh body:
+  ```json
+  { "code": 201, "status": true, "data": "User created" }
+  ```
+- Login sukses (200) contoh body:
+  ```json
+  {
+    "code": 200,
+    "status": true,
+    "data": {
+      "token": "xxxx.yyyy.zzzz",
+      "user": { "id": "1", "email": "budi@example.com" }
+    }
+  }
+  ```
+- CRUD produk (GET list) contoh body:
+  ```json
+  {
+    "code": 200,
+    "status": true,
+    "data": [{"id":1,"kode_produk":"PRD001","nama":"Contoh","harga":10000}, ...]
+  }
+  ```
+
+---
+
+## Contoh Debugging (cURL)
+
+- Registrasi:
+
+```powershell
+curl.exe -v http://192.168.1.15:8080/registrasi -Method POST -ContentType "application/json" -Body '{"nama":"Budi","email":"budi@example.com","password":"123456"}'
+```
+
+- Login:
+
+```powershell
+curl.exe -v http://192.168.1.15:8080/login -Method POST -ContentType "application/json" -Body '{"email":"budi@example.com","password":"123456"}'
+```
+
+- Jika Anda menggunakan emulator Android: ganti `192.168.1.15` menjadi `10.0.2.2` pada `ApiUrl.baseUrl`.
+
 ### login_page.dart
 
 - Tujuan: Form sederhana untuk login (email & password).
