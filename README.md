@@ -239,14 +239,18 @@ Semua model memiliki factory `fromJson(Map<String, dynamic> obj)` untuk mem-pars
 ---
 
 ## Lampiran
-<img width="804" height="1029" alt="image" src="https://github.com/user-attachments/assets/3a4d0077-44ed-404b-b809-a355692669ef" />
+<img width="643" height="1027" alt="image" src="https://github.com/user-attachments/assets/5a1476dc-c328-4407-a3e0-39ae2e8687ab" />
 
-<img width="628" height="1030" alt="image" src="https://github.com/user-attachments/assets/989034a5-7f68-446f-bb5b-5775a814c76a" />
+<img width="644" height="1030" alt="image" src="https://github.com/user-attachments/assets/60cc4b9e-0172-418d-b24a-43dce9a265a7" />
 
-<img width="628" height="1080" alt="image" src="https://github.com/user-attachments/assets/f8c7519c-f908-4828-89da-862b87bb7331" />
+<img width="642" height="1034" alt="image" src="https://github.com/user-attachments/assets/4bcf00ba-f286-46e0-a6c1-f8a9c1ca4ad1" />
+
+<img width="640" height="855" alt="image" src="https://github.com/user-attachments/assets/36fd9244-135b-4792-9ad9-618fea26388d" />
+
+<img width="641" height="847" alt="image" src="https://github.com/user-attachments/assets/e45fbcd9-6b49-469b-bad9-56de4ce91ab9" />
+
+<img width="641" height="858" alt="image" src="https://github.com/user-attachments/assets/09d89c6e-b081-4251-a9ed-0ea0767fd10a" />
 
 
-- Menghubungkan `login_page.dart` ke `LoginBloc` dan menyimpan token menggunakan `UserInfo`.
-- Mengganti daftar produk hard-coded menjadi panggilan `ProdukBloc.getProduks()`.
 
-Beritahukan mana yang ingin kamu lanjutkan, saya akan mengimplementasikannya.
+
