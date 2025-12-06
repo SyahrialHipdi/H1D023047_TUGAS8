@@ -1,3 +1,9 @@
+**Nama : Muhammad Syahrial Hipdi
+NIM  : H1D023047
+Shift KRS  : E
+Shift Baru  : E**
+
+
 # pertemuan11
 
 Repositori ini adalah aplikasi contoh kecil yang menampilkan daftar produk dengan operasi CRUD dan alur autentikasi/registrasi sederhana. Tujuannya untuk menunjukkan struktur proyek Flutter yang menggunakan lapisan `bloc` sederhana yang berinteraksi dengan helper `Api` dan `ApiUrl` untuk endpoint.
@@ -239,17 +245,10 @@ Semua model memiliki factory `fromJson(Map<String, dynamic> obj)` untuk mem-pars
 ---
 
 ## Lampiran
-<img width="643" height="1027" alt="image" src="https://github.com/user-attachments/assets/5a1476dc-c328-4407-a3e0-39ae2e8687ab" />
 
-<img width="644" height="1030" alt="image" src="https://github.com/user-attachments/assets/60cc4b9e-0172-418d-b24a-43dce9a265a7" />
 
-<img width="642" height="1034" alt="image" src="https://github.com/user-attachments/assets/4bcf00ba-f286-46e0-a6c1-f8a9c1ca4ad1" />
 
-<img width="640" height="855" alt="image" src="https://github.com/user-attachments/assets/36fd9244-135b-4792-9ad9-618fea26388d" />
-
-<img width="641" height="847" alt="image" src="https://github.com/user-attachments/assets/e45fbcd9-6b49-469b-bad9-56de4ce91ab9" />
-
-<img width="641" height="858" alt="image" src="https://github.com/user-attachments/assets/09d89c6e-b081-4251-a9ed-0ea0767fd10a" />
+https://github.com/user-attachments/assets/6248079e-6a60-450b-94fd-41be0140e89b
 
 
 
