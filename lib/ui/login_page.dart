@@ -95,8 +95,8 @@ class _LoginPageState extends State<LoginPage> {
       password: _passwordTextboxController.text,
     ).then(
       (value) async {
-        if (value.code == 200) {
-          await UserInfo().setToken(value.token.toString());
+        if (value.success == true) {
+          // await UserInfo().setToken(value.token.toString());
           await UserInfo().setUserID(int.parse(value.userID.toString()));
           Navigator.pushReplacement(
             context,

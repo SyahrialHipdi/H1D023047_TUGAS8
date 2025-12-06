@@ -8,7 +8,7 @@ class ProdukBloc {
     String apiUrl = ApiUrl.listProduk;
     var response = await Api().get(apiUrl);
     var jsonObj = json.decode(response.body);
-    List<dynamic> listProduk = (jsonObj as Map<String, dynamic>)['data'];
+    List<dynamic> listProduk = jsonObj['data'];
     List<Produk> produks = [];
     for (int i = 0; i < listProduk.length; i++) {
       produks.add(Produk.fromJson(listProduk[i]));
@@ -20,9 +20,11 @@ class ProdukBloc {
     String apiUrl = ApiUrl.createProduk;
 
     var body = {
-      "kode_produk": produk!.kodeProduk,
-      "nama_produk": produk.namaProduk,
-      "harga": produk.hargaProduk.toString(),
+      "nama": produk!.namaProduk,
+      "merk": produk.merkProduk,
+      "harga": produk.hargaProduk,
+      "jumlah": produk.jumlahProduk,
+      "tanggal_masuk": produk.tanggalProduk,
     };
 
     var response = await Api().post(apiUrl, body);
@@ -31,13 +33,15 @@ class ProdukBloc {
   }
 
   static Future updateProduk({required Produk produk}) async {
-    String apiUrl = ApiUrl.updateProduk(int.parse(produk.id!));
+    String apiUrl = ApiUrl.updateProduk(produk.id!);
     print(apiUrl);
 
     var body = {
-      "kode_produk": produk.kodeProduk,
-      "nama_produk": produk.namaProduk,
-      "harga": produk.hargaProduk.toString(),
+      "nama": produk.namaProduk,
+      "merk": produk.merkProduk,
+      "harga": produk.hargaProduk,
+      "jumlah": produk.jumlahProduk,
+      "tanggal_masuk": produk.tanggalProduk,
     };
     print("Body : $body");
     var response = await Api().put(
@@ -52,6 +56,7 @@ class ProdukBloc {
     String apiUrl = ApiUrl.deleteProduk(id!);
     var response = await Api().delete(apiUrl);
     var jsonObj = json.decode(response.body);
-    return (jsonObj as Map<String, dynamic>)['data'];
+    // return (jsonObj as Map<String, dynamic>)['data'];
+    return jsonObj['success'] == true;
   }
 }

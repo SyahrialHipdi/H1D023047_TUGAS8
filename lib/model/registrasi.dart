@@ -1,12 +1,12 @@
 class Registrasi {
-  int? code;
-  bool? status;
-  String? data;
-  Registrasi({this.code, this.status, this.data});
+  bool? success;
+  String? message;
+  dynamic data;
+  Registrasi({this.success, this.message, this.data});
   factory Registrasi.fromJson(Map<String, dynamic> obj) {
     return Registrasi(
-      code: obj['code'],
-      status: obj['status'],
+      success: obj['success'],
+      message: obj['message'],
       data: obj['data'],
     );
   }

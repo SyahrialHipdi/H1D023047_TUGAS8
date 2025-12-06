@@ -5,14 +5,21 @@ import 'package:pertemuan10/model/registrasi.dart';
 
 class RegistrasiBloc {
   static Future<Registrasi> registrasi({
-    String? nama,
+    String? name,
     String? email,
     String? password,
   }) async {
     String apiUrl = ApiUrl.registrasi;
-    var body = {"nama": nama, "email": email, "password": password};
+    var body = {"name": name, "email": email, "password": password};
     var response = await Api().post(apiUrl, body);
-    var jsonObj = json.decode(response.body);
+
+    Map<String, dynamic> jsonObj = json.decode(response.body);
+
     return Registrasi.fromJson(jsonObj);
+    // var jsonObj = json.decode(response.body);
+    // return jsonObj['status'];
+    // return Registrasi.fromJson(jsonObj);
+    // return Registrasi.fromJson(response);
+    // return response['success'];
   }
 }

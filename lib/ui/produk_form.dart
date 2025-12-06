@@ -16,9 +16,11 @@ class _ProdukFormState extends State<ProdukForm> {
   bool _isLoading = false;
   String judul = "TAMBAH PRODUK H1D023047_Syahrial";
   String tombolSubmit = "SIMPAN";
-  final _kodeProdukTextboxController = TextEditingController();
   final _namaProdukTextboxController = TextEditingController();
+  final _merkProdukTextboxController = TextEditingController();
   final _hargaProdukTextboxController = TextEditingController();
+  final _jumlahProdukTextboxController = TextEditingController();
+  final _tanggalProdukTextboxController = TextEditingController();
   @override
   void initState() {
     super.initState();
@@ -30,10 +32,13 @@ class _ProdukFormState extends State<ProdukForm> {
       setState(() {
         judul = "UBAH PRODUK H1D023047_Syahrial";
         tombolSubmit = "UBAH";
-        _kodeProdukTextboxController.text = widget.produk!.kodeProduk!;
         _namaProdukTextboxController.text = widget.produk!.namaProduk!;
+        _merkProdukTextboxController.text = widget.produk!.merkProduk!;
         _hargaProdukTextboxController.text = widget.produk!.hargaProduk
             .toString();
+        _jumlahProdukTextboxController.text = widget.produk!.jumlahProduk
+            .toString();
+        _tanggalProdukTextboxController.text = widget.produk!.tanggalProduk!;
       });
     } else {
       judul = "TAMBAH PRODUK H1D023047_Syahrial";
@@ -52,30 +57,17 @@ class _ProdukFormState extends State<ProdukForm> {
             key: _formKey,
             child: Column(
               children: [
-                _kodeProdukTextField(),
                 _namaProdukTextField(),
+                _merkProdukTextField(),
                 _hargaProdukTextField(),
+                _jumlahProdukTextField(),
+                _tanggalProdukTextField(),
                 _buttonSubmit(),
               ],
             ),
           ),
         ),
       ),
-    );
-  }
-
-  //Membuat Textbox Kode Produk
-  Widget _kodeProdukTextField() {
-    return TextFormField(
-      decoration: const InputDecoration(labelText: "Kode Produk"),
-      keyboardType: TextInputType.text,
-      controller: _kodeProdukTextboxController,
-      validator: (value) {
-        if (value!.isEmpty) {
-          return "Kode Produk harus diisi";
-        }
-        return null;
-      },
     );
   }
 
@@ -93,14 +85,56 @@ class _ProdukFormState extends State<ProdukForm> {
     );
   }
 
+  Widget _merkProdukTextField() {
+    return TextFormField(
+      decoration: const InputDecoration(labelText: "Merk Produk"),
+      keyboardType: TextInputType.text,
+      controller: _merkProdukTextboxController,
+      validator: (value) {
+        if (value!.isEmpty) {
+          return "Nama Produk harus diisi";
+        }
+        return null;
+      },
+    );
+  }
+
   Widget _hargaProdukTextField() {
     return TextFormField(
       decoration: const InputDecoration(labelText: "Harga"),
-      keyboardType: TextInputType.number,
+      keyboardType: TextInputType.text,
       controller: _hargaProdukTextboxController,
       validator: (value) {
         if (value!.isEmpty) {
           return "Harga harus diisi";
+        }
+        return null;
+      },
+    );
+  }
+
+  Widget _jumlahProdukTextField() {
+    return TextFormField(
+      decoration: const InputDecoration(labelText: "Jumlah"),
+      keyboardType: TextInputType.text,
+      controller: _jumlahProdukTextboxController,
+      validator: (value) {
+        if (value!.isEmpty) {
+          return "Jumlah harus diisi";
+        }
+        return null;
+      },
+    );
+  }
+
+  Widget _tanggalProdukTextField() {
+    return TextFormField(
+      decoration: const InputDecoration(labelText: "Tanggal"),
+      keyboardType: TextInputType.text,
+      controller: _tanggalProdukTextboxController,
+      validator: (value) {
+        if (value!.isEmpty) {
+          return "Tanggal harus diisi";
         }
         return null;
       },
@@ -132,9 +166,11 @@ class _ProdukFormState extends State<ProdukForm> {
       _isLoading = true;
     });
     Produk createProduk = Produk(id: null);
-    createProduk.kodeProduk = _kodeProdukTextboxController.text;
     createProduk.namaProduk = _namaProdukTextboxController.text;
+    createProduk.merkProduk = _merkProdukTextboxController.text;
     createProduk.hargaProduk = int.parse(_hargaProdukTextboxController.text);
+    createProduk.jumlahProduk = int.parse(_jumlahProdukTextboxController.text);
+    createProduk.tanggalProduk = _tanggalProdukTextboxController.text;
     ProdukBloc.addProduk(produk: createProduk).then(
       (value) {
         Navigator.of(context).push(
@@ -162,9 +198,11 @@ class _ProdukFormState extends State<ProdukForm> {
       _isLoading = true;
     });
     Produk updateProduk = Produk(id: widget.produk!.id!);
-    updateProduk.kodeProduk = _kodeProdukTextboxController.text;
     updateProduk.namaProduk = _namaProdukTextboxController.text;
+    updateProduk.merkProduk = _merkProdukTextboxController.text;
     updateProduk.hargaProduk = int.parse(_hargaProdukTextboxController.text);
+    updateProduk.jumlahProduk = int.parse(_jumlahProdukTextboxController.text);
+    updateProduk.tanggalProduk = _tanggalProdukTextboxController.text;
     ProdukBloc.updateProduk(produk: updateProduk).then(
       (value) {
         Navigator.of(context).push(
@@ -189,9 +227,11 @@ class _ProdukFormState extends State<ProdukForm> {
 
   @override
   void dispose() {
-    _kodeProdukTextboxController.dispose();
     _namaProdukTextboxController.dispose();
+    _merkProdukTextboxController.dispose();
     _hargaProdukTextboxController.dispose();
+    _jumlahProdukTextboxController.dispose();
+    _tanggalProdukTextboxController.dispose();
     super.dispose();
   }
 }

@@ -135,7 +135,7 @@ class _RegistrasiPageState extends State<RegistrasiPage> {
       _isLoading = true;
     });
     RegistrasiBloc.registrasi(
-      nama: _namaTextboxController.text,
+      name: _namaTextboxController.text,
       email: _emailTextboxController.text,
       password: _passwordTextboxController.text,
     ).then(
@@ -175,5 +175,6 @@ class _RegistrasiPageState extends State<RegistrasiPage> {
     //   _passwordTextboxController.dispose();
     //   _passwordKonfirmasiTextboxController.dispose();
     //   super.dispose();
+    // }
   }
 }

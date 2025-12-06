@@ -22,11 +22,11 @@ class _ProdukDetailState extends State<ProdukDetail> {
         child: Column(
           children: [
             Text(
-              "kode: ${widget.produk!.kodeProduk}",
+              "nama: ${widget.produk!.namaProduk}",
               style: const TextStyle(fontSize: 20),
             ),
             Text(
-              "nama: ${widget.produk!.namaProduk}",
+              "merk: ${widget.produk!.merkProduk}",
               style: const TextStyle(fontSize: 18),
             ),
             Text(
@@ -70,7 +70,7 @@ class _ProdukDetailState extends State<ProdukDetail> {
         OutlinedButton(
           child: const Text('Ya'),
           onPressed: () {
-            ProdukBloc.deleteProduk(id: int.parse(widget.produk!.id!)).then(
+            ProdukBloc.deleteProduk(id: widget.produk!.id!).then(
               (value) {
                 Navigator.of(context).push(
                   MaterialPageRoute(builder: (context) => const ProdukPage()),
